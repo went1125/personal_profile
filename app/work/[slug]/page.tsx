@@ -1,0 +1,6 @@
+import { notFound } from "next/navigation";
+import Link from "next/link";
+import { ProjectArtwork } from "@/components/project-card";
+import { getProject, projects } from "@/lib/projects";
+export function generateStaticParams() { return projects.map(({ slug }) => ({ slug })); }
+export default async function ProjectPage({ params }: { params: Promise<{ slug: string }> }) { const project = getProject((await params).slug); if (!project) notFound(); return <article className="case-study"><header className="case-hero"><div><p className="eyebrow">{project.category} · {project.year}</p><h1>{project.title}</h1><p>{project.excerpt}</p></div><ProjectArtwork tone={project.tone} title={project.title} /></header><section className="case-details"><dl><div><dt>服務</dt><dd>{project.services}</dd></div><div><dt>角色</dt><dd>策略、設計與前端實作</dd></div><div><dt>年份</dt><dd>{project.year}</dd></div></dl><div className="case-copy"><p className="eyebrow">The brief</p><h2>{project.challenge}</h2><p>從理解使用情境開始，我將內容、介面與技術限制拉進同一套決策框架。每一個畫面都回到最初的問題：它是否幫助人們更快、更安心地前進？</p><p className="eyebrow">The outcome</p><h2>{project.outcome}</h2></div></section><Link className="next-project" href="/work">回到所有作品 <span>↗</span></Link></article>; }
